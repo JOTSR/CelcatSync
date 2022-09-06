@@ -41,5 +41,3 @@ if (Deno.args[0] === '--serve' || Deno.args[0] === '-S') {
         { port: 9421 }
     )
 }
-
-Deno.exit(0)
