@@ -8,12 +8,12 @@ const saveFileName = `./${(new Date).toISOString().split('T')[0]}.ics`
 Cron[config.cronConfig](() => periodicUpdate(saveFileName))
 
 async function periodicUpdate(saveFileName: string) {
-    Deno.writeTextFile(saveFileName, ICS.Header, { append: true })
+    Deno.writeTextFile(saveFileName, outdent.string(ICS.Header), { append: true })
     let counter = 0
 
     for await (const entry of fetchCalendar(config)) {
 
-        const title = (entry.title.match(/(^\d\w+) (.*)/) ?? ['', entry.title]).slice(1).reverse().join(' ') //Reverse UE code and name
+        const title = (entry.title?.match(/(^\d\w+) (.*)/) ?? ['', entry.title]).slice(1).reverse().join(' ') //Reverse UE code and name
 
         const vEvent = new VEvent({
             title: `${entry.eventCategory} ${title}`,
@@ -28,7 +28,7 @@ async function periodicUpdate(saveFileName: string) {
         localStorage.setItem(`${counter++}`, event)
         Deno.writeTextFile(saveFileName, event, { append: true })
     }
-    Deno.writeTextFile(saveFileName, ICS.Footer, { append: true })
+    Deno.writeTextFile(saveFileName, outdent.string(ICS.Footer), { append: true })
 }
 
 await periodicUpdate(saveFileName)
