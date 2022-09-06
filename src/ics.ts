@@ -66,6 +66,10 @@ export class VEvent {
         this.#properties = properties
     }
 
+    get properties(): VEventProperties {
+        return structuredClone(this.#properties)
+    }
+
     /**
      * It takes the properties of the event and returns a string in the format of an ICS file.
      * @returns A string of the event in ICS format.
