@@ -12,8 +12,11 @@ async function periodicUpdate(saveFileName: string) {
     let counter = 0
 
     for await (const entry of fetchCalendar(config)) {
+
+        const title = (entry.title.match(/(^\d\w+) (.*)/) ?? ['', entry.title]).slice(1).reverse().join(' ') //Reverse UE code and name
+
         const vEvent = new VEvent({
-            title: entry.title,
+            title: `${entry.eventCategory} ${title}`,
             start: entry.start,
             end: entry.end,
             location: `${entry.faculty}, ${entry.location}`,
