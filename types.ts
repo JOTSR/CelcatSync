@@ -1,9 +1,13 @@
+import { VEvent } from './src/ics.ts'
+
 export type Config = {
     endpoint: string,
     groupeId: string,
     tdId: string,
     dateRange: [Date, Date],
-    cronConfig: 'daily' | 'weekly' | 'monthly'
+    cronConfig: 'daily' | 'weekly' | 'monthly',
+    filter?: (vEvent: VEvent) => boolean,
+    map?: (vEvent: VEvent) => VEvent
 }
 
 export type Fn<T, U> = (args: T) => U
