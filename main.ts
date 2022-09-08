@@ -8,7 +8,7 @@ const saveFileName = `./${(new Date).toISOString().split('T')[0]}.ics`
 Cron[config.cronConfig](() => periodicUpdate(saveFileName))
 
 async function periodicUpdate(saveFileName: string) {
-    Deno.writeTextFile(saveFileName, outdent.string(ICS.Header), { append: true })
+    Deno.writeTextFile(saveFileName, outdent.string(ICS.Header), { append: false })
     let counter = 0
 
     for await (const entry of fetchCalendar(config)) {
