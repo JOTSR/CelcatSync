@@ -7,7 +7,12 @@ import { calendarEntry, Config, Entry } from '../types.ts'
  * @param endpoint 'Celcat endpoint'
  * @param query 'Query parameters'
  */
-async function *fetchEntries(endpoint: URL, query: FormData): AsyncGenerator<Entry> {
+async function *fetchEntries(
+    endpoint: URL,
+    query: FormData,
+    options?: { map?: Config['map'], filer?: Config['filter'] }
+    ): AsyncGenerator<Entry> {
+
     const data = await fetch(endpoint, {
         method: 'POST',
         body: query
@@ -20,7 +25,7 @@ async function *fetchEntries(endpoint: URL, query: FormData): AsyncGenerator<Ent
         
         const { title, room, groupeId, staff } = parseDescription(description)
 
-        yield {
+        const data = {
             title,
             start: new Date(start),
             end: new Date(end),
@@ -32,6 +37,10 @@ async function *fetchEntries(endpoint: URL, query: FormData): AsyncGenerator<Ent
             eventCategory,
             staff
         }
+
+        if (options?.filer?.(data) ?? false) continue
+
+        yield options?.map?.(data) ?? data
     }
 }
 
@@ -53,7 +62,7 @@ export async function *fetchCalendar(config: Config): AsyncGenerator<Entry> {
         form.append('federationIds[]', config.groupeId)
         form.append('colourScheme', '3')
     
-        yield* fetchEntries(new URL(config.endpoint), form)
+        yield* fetchEntries(new URL(config.endpoint), form, config)
 
         ;[weekStart, weekEnd] = [weekEnd, addToDate(weekStart, { days: 7 })]
     }
