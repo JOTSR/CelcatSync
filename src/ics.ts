@@ -40,7 +40,7 @@ export const ICS = {
     },
     get Footer() {
         return `
-        END:VCALENDAR`
+        \nEND:VCALENDAR`
     }
 }
 
