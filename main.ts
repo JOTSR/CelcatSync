@@ -3,9 +3,9 @@ import { Cron, outdent, serve } from './deps.ts'
 import { fetchCalendar } from './src/fetching.ts'
 import { ICS, VEvent } from './src/ics.ts'
 
-const saveFileName = `./${(new Date).toISOString().split('T')[0]}.ics`
+const saveFileName = () => `./${(new Date).toISOString().split('T')[0]}.ics`
 
-Cron[config.cronConfig](() => periodicUpdate(saveFileName))
+Cron[config.cronConfig](() => periodicUpdate(saveFileName()))
 
 async function periodicUpdate(saveFileName: string) {
     Deno.writeTextFile(saveFileName, outdent.string(ICS.Header), { append: false })
@@ -31,15 +31,19 @@ async function periodicUpdate(saveFileName: string) {
     Deno.writeTextFile(saveFileName, outdent.string(ICS.Footer), { append: true })
 }
 
-await periodicUpdate(saveFileName)
+await periodicUpdate(saveFileName())
 
 if (Deno.args[0] === '--serve' || Deno.args[0] === '-S') {
     serve(
         async () => {
-            const body = await Deno.readTextFile(saveFileName)
-            const response = new Response(body, { status: 200 })
-            response.headers.set('content-type', 'text/calendar')
-            return response
+            try {
+                const body = await Deno.readTextFile(saveFileName())
+                const response = new Response(body, { status: 200 })
+                response.headers.set('content-type', 'text/calendar')
+                return response                
+            } catch {
+                return new Response('Internal server error, ressource will be avaible soon', { status: 500 })
+            }
         },
         { port: 9421 }
     )
