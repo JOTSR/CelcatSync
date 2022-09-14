@@ -9,7 +9,6 @@ Cron[config.cronConfig](() => periodicUpdate(saveFileName()))
 
 async function periodicUpdate(saveFileName: string) {
     Deno.writeTextFile(saveFileName, outdent.string(ICS.Header), { append: false })
-    let counter = 0
 
     for await (const entry of fetchCalendar(config)) {
 
@@ -25,7 +24,6 @@ async function periodicUpdate(saveFileName: string) {
         })
 
         const event = outdent.string(ICS.stringifyEvent(vEvent)).replaceAll('\n\n', '\n')
-        localStorage.setItem(`${counter++}`, event)
         Deno.writeTextFile(saveFileName, event, { append: true })
     }
     Deno.writeTextFile(saveFileName, outdent.string(ICS.Footer), { append: true })
@@ -37,6 +35,7 @@ if (Deno.args[0] === '--serve' || Deno.args[0] === '-S') {
     serve(
         async () => {
             try {
+                Deno.lstat(saveFileName()).catch(async () => await periodicUpdate(saveFileName()))
                 const body = await Deno.readTextFile(saveFileName())
                 const response = new Response(body, { status: 200 })
                 response.headers.set('content-type', 'text/calendar')
