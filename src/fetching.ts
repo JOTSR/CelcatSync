@@ -10,7 +10,7 @@ import { calendarEntry, Config, Entry } from '../types.ts'
 async function *fetchEntries(
     endpoint: URL,
     query: FormData,
-    options?: { map?: Config['map'], filer?: Config['filter'] }
+    options?: { map?: Config['map'], filter?: Config['filter'] }
     ): AsyncGenerator<Entry> {
 
     const data = await fetch(endpoint, {
@@ -35,10 +35,13 @@ async function *fetchEntries(
             room,
             groupeId,
             eventCategory,
-            staff
+            staff,
+            _raw: {
+                description
+            }
         }
 
-        if (options?.filer?.(data) ?? false) continue
+        if (options?.filter?.(data) ?? false) continue
 
         yield options?.map?.(data) ?? data
     }
