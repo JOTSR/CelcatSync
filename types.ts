@@ -49,5 +49,8 @@ export type Entry = {
     room: string,
     groupeId: string,
     eventCategory: string,
-    staff: string
+    staff: string,
+    _raw: {
+        description: string
+    }
 }
