@@ -1,10 +1,9 @@
 import { fetchCalendar } from './fetching.ts'
-import { VEvent } from './ics.ts'
+import { ICS, VEvent } from './ics.ts'
 import { Config } from '../types.ts'
 
 export async function getCalendarEvents(config: Config) {
-	const cacheName = btoa(JSON.stringify(config))
-	const eventList: string[] = []
+	const eventList: VEvent[] = []
 
 	for await (const entry of fetchCalendar(config)) {
 		const title = (entry.title?.match(/(^\d\w+) (.*)/) ?? ['', entry.title])
@@ -19,10 +18,13 @@ export async function getCalendarEvents(config: Config) {
 			description: `${entry.room}, ${entry.staff} (${entry.department})`,
 		})
 
-		eventList.push(vEvent.toICS().replaceAll('\n\n', '\n'))
+		eventList.push(vEvent)
 	}
 
-	const events = eventList.join('')
-	localStorage.setItem(cacheName, events)
+	const events = ICS
+		.stringify(eventList)
+		.replaceAll('\n\n', '\n')
+		.replaceAll('\n', '\r\n')
+	localStorage.setItem('cached_calendar', events)
 	return events
 }
