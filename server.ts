@@ -1,4 +1,4 @@
-import { config } from './config.example.ts'
+import { config } from './config.ts'
 import { getCalendarEvents } from './src/get_calendar_events.ts'
 
 export default {
