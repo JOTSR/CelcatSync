@@ -1,6 +1,6 @@
 import { fetchCalendar } from './fetching.ts'
 import { ICS, VEvent } from './ics.ts'
-import { Config } from '../types.ts'
+import type { Config } from '../types.ts'
 
 export async function getCalendarEvents(config: Config) {
 	const eventList: VEvent[] = []
@@ -25,6 +25,5 @@ export async function getCalendarEvents(config: Config) {
 		.stringify(eventList)
 		.replaceAll('\n\n', '\n')
 		.replaceAll('\n', '\r\n')
-	localStorage.setItem('cached_calendar', events)
 	return events
 }
