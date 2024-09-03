@@ -22,7 +22,7 @@ export const ICS = {
         BEGIN:VCALENDAR
         VERSION:2.0
         PRODID:-//hacksw/hancal//NONSGML v1.0//EN
-        ${vEvents.map((vEvent) => vEvent.toICS())}
+        ${vEvents.map((vEvent) => vEvent.toICS()).join('\n\n')}
         END:VCALENDAR`
 	},
 	/**
@@ -77,23 +77,29 @@ export class VEvent {
 	 * @returns A string of the event in ICS format.
 	 */
 	toICS() {
+		const uid = new Date().toISOString().replaceAll(/-|:|\.\d+/g, '')
+		const dtend =
+			this.#properties.end.getTime() > this.#properties.start.getTime()
+				? this.#properties.end
+				: this.#properties.start
+
 		return dedent`
         BEGIN:VEVENT
+        UID:${uid}-${Math.random()}
+        DTSTAMP:${uid}
         DTSTART:${
-			this.#properties.start.toISOString().replace(/-|:|(\.\d{3})/g, '')
+			this.#properties.start.toISOString().replace(/-|:|\.\d+/g, '')
 		}
-        DTEND:${
-			this.#properties.end.toISOString().replace(/-|:|(\.\d{3})/g, '')
-		}
-        SUMMARY:${this.#properties.title}
+        DTEND:${dtend.toISOString().replace(/-|:|\.\d+/g, '')}
+        SUMMARY:${this.#properties.title.replaceAll(/\r?\n/g, ' ')}
         ${
 			this.#properties.location !== undefined
-				? `LOCATION:${this.#properties.location}`
+				? `LOCATION:${this.#properties.location.replaceAll(/\r?\n/g, ' ')}`
 				: ''
 		}
         ${
 			this.#properties.category !== undefined
-				? `CATEGORIES:${this.#properties.category}`
+				? `CATEGORIES:${this.#properties.category.replaceAll(/\r?\n/g, ' ')}`
 				: ''
 		}
         ${
@@ -103,7 +109,9 @@ export class VEvent {
 		}
         ${
 			this.#properties.description !== undefined
-				? `DESCRIPTION:${this.#properties.description}`
+				? `DESCRIPTION:${
+					this.#properties.description.replaceAll(/\r?\n/g, ' ')
+				}`
 				: ''
 		}
         ${
