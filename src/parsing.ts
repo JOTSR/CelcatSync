@@ -8,28 +8,42 @@ import { Description } from '../types.ts'
  * @returns An object with the following properties:
  */
 export function parseDescription(description: string): Description {
-    try {
-        const [
-            category,
-            title, 
-            groupeId,
-            staff,
-            rawLocation
-        ] = decodeHtmlString(description).split('\r\n\r\n<br />\r\n\r\n')
-        
-        const location = rawLocation.split('/')[0]
-        const room = decodeHtmlString(rawLocation.split('/ ')[1])
-    
-        return { category, title, groupeId, staff: staff.replaceAll('<br />', ', '), location, room }
-    } catch {
-        const [
-            category,
-            groupeId,
-            _, 
-            title
-        ] = decodeHtmlString(description).split('\r\n\r\n<br />\r\n\r\n')
-        return { category, title, groupeId, staff: 'Non renseigné', location: 'Non renseigné', room: 'Non renseigné' }
-    }
+	try {
+		const [
+			category,
+			title,
+			groupeId,
+			staff,
+			rawLocation,
+		] = decodeHtmlString(description).split('\r\n\r\n<br />\r\n\r\n')
+
+		const location = rawLocation.split('/')[0]
+		const room = decodeHtmlString(rawLocation.split('/ ')[1])
+
+		return {
+			category,
+			title,
+			groupeId,
+			staff: staff.replaceAll('<br />', ', '),
+			location,
+			room,
+		}
+	} catch {
+		const [
+			category,
+			groupeId,
+			_,
+			title,
+		] = decodeHtmlString(description).split('\r\n\r\n<br />\r\n\r\n')
+		return {
+			category,
+			title,
+			groupeId,
+			staff: 'Non renseigné',
+			location: 'Non renseigné',
+			room: 'Non renseigné',
+		}
+	}
 }
 
 /**
@@ -39,16 +53,16 @@ export function parseDescription(description: string): Description {
  * @returns A function that takes a string and returns a string.
  */
 export function decodeHtmlString(string: string): string {
-    const codes = [... new Set(string.match(/&#\d+;/g))]
+	const codes = [...new Set(string.match(/&#\d+;/g))]
 
-    const chars = codes.map(code => {
-        const number = parseInt(code.slice(2))
-        return String.fromCharCode(number)
-    })
+	const chars = codes.map((code) => {
+		const number = parseInt(code.slice(2))
+		return String.fromCharCode(number)
+	})
 
-    for (const index of codes.keys()) {
-        string = string.replaceAll(codes[index], chars[index])
-    }
+	for (const index of codes.keys()) {
+		string = string.replaceAll(codes[index], chars[index])
+	}
 
-    return string
+	return string
 }
