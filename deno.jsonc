@@ -12,5 +12,6 @@
 	},
 	"imports": {
 		"dedent": "npm:dedent@^1.5.3"
-	}
+	},
+	"exports": {}
 }
