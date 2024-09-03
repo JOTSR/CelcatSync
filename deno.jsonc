@@ -1,10 +1,16 @@
 {
-    "fmt": {
-        "options": {
-            "singleQuote": true
-        }
-    },
-    "tasks": {
-        "start": "deno run --allow-net='celcat.u-bordeaux.fr,0.0.0.0:9421,127.0.0.1:9421,localhost:9421' --allow-write='.' --allow-read='.' ./main.ts"
-    }
+	"name": "@jotsr/celcat-sync",
+	"fmt": {
+		"options": {
+			"singleQuote": true,
+			"semiColons": false,
+			"useTabs": true
+		}
+	},
+	"tasks": {
+		"start": "deno run --allow-net='celcat.u-bordeaux.fr,0.0.0.0:9421,127.0.0.1:9421,localhost:9421' --allow-write='.' --allow-read='.' ./main.ts"
+	},
+	"imports": {
+		"dedent": "npm:dedent@^1.5.3"
+	}
 }
