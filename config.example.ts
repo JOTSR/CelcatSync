@@ -1,4 +1,4 @@
-import { Config } from './types.ts'
+import type { Config } from './types.ts'
 
 export const config: Config = {
 	endpoint: 'https://celcat.u-bordeaux.fr/calendar/Home/GetCalendarData',

@@ -1,5 +1,6 @@
 {
 	"name": "@jotsr/celcat-sync",
+	"version": "0.1.0",
 	"fmt": {
 		"singleQuote": true,
 		"semiColons": false,

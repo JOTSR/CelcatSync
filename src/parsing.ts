@@ -1,4 +1,4 @@
-import { Description } from '../types.ts'
+import type { Description } from '../types.ts'
 
 /**
  * It takes a string, splits it into an array of strings, then returns an object with the first string
