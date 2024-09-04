@@ -6,6 +6,7 @@ export type Config = {
 	cronConfig: 'daily' | 'weekly' | 'monthly'
 	filter?: (Entry: Entry) => boolean
 	map?: (Entry: Entry) => Entry
+	timeZone: `${string}/${string}`
 }
 
 export type Fn<T, U> = (args: T) => U

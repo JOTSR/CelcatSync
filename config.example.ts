@@ -6,4 +6,5 @@ export const config: Config = {
 	tdId: '',
 	dateRange: [new Date('2022-09-01'), new Date('2023-01-01')],
 	cronConfig: 'daily',
+	timeZone: 'Europe/Paris',
 }
