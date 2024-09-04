@@ -10,7 +10,8 @@ export default {
 					'Content-Type': 'text/calendar',
 				},
 			})
-		} catch {
+		} catch (e) {
+			console.error(e)
 			return new Response(
 				'Internal server error, resource will be avaible soon',
 				{ status: 500 },
