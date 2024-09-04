@@ -1,7 +1,7 @@
 import { addToDate, getWeekStart } from './date.ts'
 import { parseDescription } from './parsing.ts'
 import type { calendarEntry, Config, Entry } from '../types.ts'
-import { Temporal } from 'temporal-polyfill'
+import { Temporal } from '@js-temporal/polyfill'
 
 /**
  * Fetch calendar event of the Celcat endpoint and yield on each entry.
@@ -22,6 +22,7 @@ async function* fetchEntries(
 	const entries = await data.json() as calendarEntry[]
 
 	for (const entry of entries) {
+		console.log(entry)
 		const {
 			start,
 			end,
@@ -37,7 +38,7 @@ async function* fetchEntries(
 		const data = {
 			title,
 			start: toDate(start, timeZone),
-			end: toDate(end, timeZone),
+			end: toDate(end ?? start, timeZone),
 			department,
 			faculty,
 			location: sites?.[0] ?? 'Non renseigné',
@@ -57,6 +58,7 @@ async function* fetchEntries(
 }
 
 function toDate(ISODate: string, timeZone: `${string}/${string}`): Date {
+	//@ts-expect-error Maybe wrong type inference
 	const fixedTimeZone = Temporal.TimeZone
 		.from(timeZone)
 		.getInstantFor(ISODate)
