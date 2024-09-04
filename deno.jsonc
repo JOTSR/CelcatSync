@@ -10,8 +10,8 @@
 		"start": "deno serve --allow-net='celcat.u-bordeaux.fr' server.ts"
 	},
 	"imports": {
+		"@js-temporal/polyfill": "npm:@js-temporal/polyfill@^0.4.4",
 		"dedent": "npm:dedent@^1.5.3",
-		"temporal-polyfill": "npm:temporal-polyfill@^1.0.0"
 	},
 	"exports": {},
 	"deploy": {
