@@ -2,11 +2,16 @@
   "version": "3",
   "packages": {
     "specifiers": {
-      "npm:dedent@^1.5.3": "npm:dedent@1.5.3"
+      "npm:dedent@^1.5.3": "npm:dedent@1.5.3",
+      "npm:temporal-polyfill@^1.0.0": "npm:temporal-polyfill@1.0.0"
     },
     "npm": {
       "dedent@1.5.3": {
         "integrity": "sha512-NHQtfOOW68WD8lgypbLA5oT+Bt0xXJhiYvoR6SmmNXZfpzOGXwdKWmcwG8N7PwVVWV3eF/68nmD9BaJSsTBhyQ==",
+        "dependencies": {}
+      },
+      "temporal-polyfill@1.0.0": {
+        "integrity": "sha512-YvGbXYeQYTwXv8Sg6etukqESXPfrQ54a6isOcP1vdpM0N3f3uNn370wjK6QC9IaX6TmQjSxQEOUmbYDYq68hYg==",
         "dependencies": {}
       }
     }
@@ -26,7 +31,8 @@
   },
   "workspace": {
     "dependencies": [
-      "npm:dedent@^1.5.3"
+      "npm:dedent@^1.5.3",
+      "npm:temporal-polyfill@^1.0.0"
     ]
   }
 }

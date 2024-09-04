@@ -1,25 +1,24 @@
 {
-  "name": "@jotsr/celcat-sync",
-  "fmt": {
-    "options": {
-      "singleQuote": true,
-      "semiColons": false,
-      "useTabs": true
-    }
-  },
-  "tasks": {
-    "start": "deno serve --allow-net='celcat.u-bordeaux.fr' server.ts"
-  },
-  "imports": {
-    "dedent": "npm:dedent@^1.5.3"
-  },
-  "exports": {},
-  "deploy": {
-    "project": "6915fbc0-899b-4a72-853e-1aa0727161c2",
-    "exclude": [
-      "**/node_modules"
-    ],
-    "include": [],
-    "entrypoint": "server.ts"
-  }
+	"name": "@jotsr/celcat-sync",
+	"fmt": {
+		"singleQuote": true,
+		"semiColons": false,
+		"useTabs": true
+	},
+	"tasks": {
+		"start": "deno serve --allow-net='celcat.u-bordeaux.fr' server.ts"
+	},
+	"imports": {
+		"dedent": "npm:dedent@^1.5.3",
+		"temporal-polyfill": "npm:temporal-polyfill@^1.0.0"
+	},
+	"exports": {},
+	"deploy": {
+		"project": "6915fbc0-899b-4a72-853e-1aa0727161c2",
+		"exclude": [
+			"**/node_modules"
+		],
+		"include": [],
+		"entrypoint": "server.ts"
+	}
 }

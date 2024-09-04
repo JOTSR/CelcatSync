@@ -1,6 +1,7 @@
 import { addToDate, getWeekStart } from './date.ts'
 import { parseDescription } from './parsing.ts'
-import { calendarEntry, Config, Entry } from '../types.ts'
+import type { calendarEntry, Config, Entry } from '../types.ts'
+import { Temporal } from 'temporal-polyfill'
 
 /**
  * Fetch calendar event of the Celcat endpoint and yield on each entry.
@@ -10,6 +11,7 @@ import { calendarEntry, Config, Entry } from '../types.ts'
 async function* fetchEntries(
 	endpoint: URL,
 	query: FormData,
+	timeZone: Config['timeZone'],
 	options?: { map?: Config['map']; filter?: Config['filter'] },
 ): AsyncGenerator<Entry> {
 	const data = await fetch(endpoint, {
@@ -34,8 +36,8 @@ async function* fetchEntries(
 
 		const data = {
 			title,
-			start: new Date(start),
-			end: new Date(end),
+			start: toDate(start, timeZone),
+			end: toDate(end, timeZone),
 			department,
 			faculty,
 			location: sites?.[0] ?? 'Non renseigné',
@@ -52,6 +54,15 @@ async function* fetchEntries(
 
 		yield options?.map?.(data) ?? data
 	}
+}
+
+function toDate(ISODate: string, timeZone: `${string}/${string}`): Date {
+	const fixedTimeZone = Temporal.TimeZone
+		.from(timeZone)
+		.getInstantFor(ISODate)
+		.toString()
+
+	return new Date(fixedTimeZone)
 }
 
 /**
@@ -74,7 +85,7 @@ export async function* fetchCalendar(config: Config): AsyncGenerator<Entry> {
 		form.append('federationIds[]', config.groupeId)
 		form.append('colourScheme', '3')
 
-		yield* fetchEntries(new URL(config.endpoint), form, config)
+		yield* fetchEntries(new URL(config.endpoint), form, config.timeZone, config)
 		;[weekStart, weekEnd] = [weekEnd, addToDate(weekStart, { days: 7 })]
 	}
 }
